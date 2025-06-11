@@ -13,6 +13,8 @@ AWarriorBuild::AWarriorBuild()
 	CostWater = 100;
 	CostWood = 100;
 
+
+
 }
 
 // Called when the game starts or when spawned

@@ -13,11 +13,12 @@ AMainBuild::AMainBuild()
 {
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
 	RootComponent = StaticMesh;
-	CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), HUDWidgetClass);
 	SelectIndicator = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SelectIndicator"));
 	SelectIndicator->SetupAttachment(RootComponent);
 	SelectIndicator->SetHiddenInGame(true);
 	SelectIndicator->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	
 
 
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -29,9 +30,15 @@ void AMainBuild::BeginPlay()
 {
 	Super::BeginPlay();
 
+	Super::BeginPlay();
+
 	if (HUDWidgetClass)
 	{
 		CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), HUDWidgetClass);
+		if (!CurrentWidget)
+		{
+			UE_LOG(LogTemp, Error, TEXT("No se pudo crear CurrentWidget en %s"), *GetName());
+		}
 	}
 	else
 	{

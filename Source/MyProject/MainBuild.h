@@ -34,6 +34,8 @@ protected:
 
 public:	
 	// Called every frame
+
+	UStaticMeshComponent* GetStaticMeshComponent() const { return StaticMesh; }
 	virtual void Tick(float DeltaTime) override;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Build)
 	int health;

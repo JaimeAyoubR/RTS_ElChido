@@ -4,6 +4,7 @@
 #include "GameManager.h"
 
 #include "MainBuild.h"
+#include "Engine/OverlapResult.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -12,14 +13,11 @@ AGameManager::AGameManager()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	numOfFood = 50;
-	numOfStone = 100;
-	numOfWater = 200;
-	numOfWood = 3000;
-	if (numOfWater == 0)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("The number of water is 0"));
-	}
+	numOfFood = 500;
+	numOfStone = 500;
+	numOfWater = 500;
+	numOfWood = 5000;
+
 }
 
 // Called when the game starts or when spawned
@@ -125,22 +123,54 @@ void AGameManager::PlaceBuilding()
 	const AWarriorBuild* DefaultBuilding = Cast<AWarriorBuild>(PendingBuildClass->GetDefaultObject());
 	if (!DefaultBuilding) return;
 
-	// Validar recursos
+	FVector BoxExtent = DefaultBuilding->GetStaticMeshComponent()->Bounds.BoxExtent;
+	FVector BoxCenter = Location + FVector(0, 0, BoxExtent.Z);
+	FCollisionShape CollisionBox = FCollisionShape::MakeBox(BoxExtent);
+
+	TArray<FOverlapResult> Overlaps;
+
+	bool bIsOverlapping = GetWorld()->OverlapMultiByChannel(
+		Overlaps,
+		BoxCenter,
+		FQuat::Identity,
+		ECC_WorldStatic,
+		CollisionBox
+	);
+
+	if (bIsOverlapping)
+	{
+		for (const FOverlapResult& Result : Overlaps)
+		{
+			if (AActor* HitActor = Result.GetActor())
+			{
+				if (HitActor->ActorHasTag("Suelo"))
+				{
+					UE_LOG(LogTemp, Warning, TEXT("Suelo detectado - ignorado"));
+					continue; // Ignorar suelo y seguir revisando
+				}
+
+				// Si choca con cualquier otro actor que no sea suelo, bloquear construcción
+				UE_LOG(LogTemp, Warning, TEXT("Colisionando con: %s"), *HitActor->GetName());
+				UE_LOG(LogTemp, Warning, TEXT("No se puede construir aquí. Ya hay algo."));
+				return;
+			}
+		}
+	}
+
 	if (numOfFood >= DefaultBuilding->CostFood &&
 		numOfStone >= DefaultBuilding->CostStone &&
 		numOfWater >= DefaultBuilding->CostWater &&
 		numOfWood >= DefaultBuilding->CostWood)
 	{
-		// Gastar recursos
 		numOfFood -= DefaultBuilding->CostFood;
 		numOfStone -= DefaultBuilding->CostStone;
 		numOfWater -= DefaultBuilding->CostWater;
 		numOfWood -= DefaultBuilding->CostWood;
 
-		// Colocar edificio real
+
 		GetWorld()->SpawnActor<AWarriorBuild>(PendingBuildClass, Location, FRotator::ZeroRotator);
 
-		// Actualizar UI
+
 		if (ResourceWidget)
 			ResourceWidget->UpdateResources(numOfFood, numOfStone, numOfWater, numOfWood);
 	}
@@ -149,7 +179,7 @@ void AGameManager::PlaceBuilding()
 		UE_LOG(LogTemp, Warning, TEXT("No hay suficientes recursos"));
 	}
 
-	// Salir de modo construcción
+
 	BuildPreview->Destroy();
 	BuildPreview = nullptr;
 	bIsInBuildMode = false;
@@ -163,13 +193,13 @@ void AGameManager::EnterBuildMode(TSubclassOf<AWarriorBuild> BuildingClass)
 	bIsInBuildMode = true;
 	PendingBuildClass = BuildingClass;
 
-	
-	FVector SpawnLocation = FVector::ZeroVector; 
+
+	FVector SpawnLocation = FVector::ZeroVector;
 	BuildPreview = GetWorld()->SpawnActor<AWarriorBuild>(BuildingClass, SpawnLocation, FRotator::ZeroRotator);
 
 	if (BuildPreview)
 	{
-		BuildPreview->SetActorEnableCollision(false); 
+		BuildPreview->SetActorEnableCollision(false);
 		BuildPreview->SetActorHiddenInGame(false);
 	}
 }
