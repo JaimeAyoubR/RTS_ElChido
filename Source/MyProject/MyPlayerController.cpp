@@ -7,6 +7,8 @@
 #include "Resources.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "GameManager.h"
+#include "Kismet/GameplayStatics.h"
 
 AMyPlayerController::AMyPlayerController()
 {
@@ -51,6 +53,11 @@ void AMyPlayerController::SetupInputComponent()
 		//Agregar la funcion de command
 		EnhancedInputComponent->BindAction(CommandAction, ETriggerEvent::Completed, this,
 		                                   &AMyPlayerController::CommandSelectedActors);
+
+		//Funcion para entrear en Build Mode
+		EnhancedInputComponent->BindAction(BuildModeAction, ETriggerEvent::Started, this, &AMyPlayerController::EnterBuildMode);
+		EnhancedInputComponent->BindAction(SelectAction, ETriggerEvent::Completed, this, &AMyPlayerController::PlaceBuilding);
+
 	}
 }
 
@@ -192,5 +199,23 @@ void AMyPlayerController::SelectMultipleActors()
 				}
 			}
 		}
+	}
+}
+
+void AMyPlayerController::EnterBuildMode()
+{
+	AGameManager* GM = Cast<AGameManager>(UGameplayStatics::GetActorOfClass(GetWorld(), AGameManager::StaticClass()));
+	if (GM && BuildingToPlaceClass)
+	{
+		GM->EnterBuildMode(BuildingToPlaceClass);
+	}
+}
+
+void AMyPlayerController::PlaceBuilding()
+{
+	AGameManager* GM = Cast<AGameManager>(UGameplayStatics::GetActorOfClass(GetWorld(), AGameManager::StaticClass()));
+	if (GM)
+	{
+		GM->PlaceBuilding();
 	}
 }

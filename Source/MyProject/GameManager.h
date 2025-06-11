@@ -6,6 +6,7 @@
 #include "BasePawn.h"
 #include "GameFramework/Actor.h"
 #include "ResourceWidget.h"
+#include "WarriorBuild.h"
 #include "GameManager.generated.h"
 
 UCLASS()
@@ -57,11 +58,26 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void AddWood(int Amount);
 
+	//Cosas para el HUD o Widget
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category = UI)
 	TSubclassOf<class UResourceWidget> ResourceWidgetClass;
 
 	UPROPERTY()
 	UResourceWidget* ResourceWidget;
+
+	//Cosas para construir
+
+	bool bIsInBuildMode = false;
+
+	TSubclassOf<class AWarriorBuild> PendingBuildClass;
+
+	AWarriorBuild* BuildPreview = nullptr;
+
+	UFUNCTION(BlueprintCallable)
+	void PlaceBuilding();
+
+	UFUNCTION(BlueprintCallable)
+	void EnterBuildMode(TSubclassOf<AWarriorBuild> BuildingClass);
 
 
 };

@@ -26,7 +26,7 @@ class MYPROJECT_API AMyPlayerController : public APlayerController
 
 public:
 	AMyPlayerController();
-	
+
 	UPROPERTY(EditDefaultsOnly, Category = "Input", meta = (AllowPrivateAccess = true))
 	TObjectPtr<UInputMappingContext> InputMappingContext;
 
@@ -44,6 +44,9 @@ protected:
 	void OnGoingSelect(const FInputActionValue& value);
 	void EndSelect(const FInputActionValue& value);
 	void SelectMultipleActors();
+	//Funciones para construir
+	void EnterBuildMode();
+	void PlaceBuilding(); 
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess=true))
@@ -51,6 +54,14 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess=true))
 	TObjectPtr<UInputAction> CommandAction;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UInputAction> BuildModeAction;
+
+	UPROPERTY(EditAnywhere, Category = "Build System")
+	TSubclassOf<class AWarriorBuild> BuildingToPlaceClass;
+
+	
 
 
 	UPROPERTY()
