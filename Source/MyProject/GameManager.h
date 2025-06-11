@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "BasePawn.h"
 #include "GameFramework/Actor.h"
+#include "ResourceWidget.h"
 #include "GameManager.generated.h"
 
 UCLASS()
@@ -25,13 +26,13 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditAnywhere)
-	int numOfFood ;
+	int32 numOfFood ;
 	UPROPERTY(EditAnywhere)
-	int numOfStone;
+	int32 numOfStone;
 	UPROPERTY(EditAnywhere)
-	int numOfWater;
+	int32 numOfWater;
 	UPROPERTY(EditAnywhere)
-	int numOfWood;
+	int32 numOfWood;
 
 	
 	UPROPERTY(EditAnywhere)
@@ -55,6 +56,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void AddWood(int Amount);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category = UI)
+	TSubclassOf<class UResourceWidget> ResourceWidgetClass;
+
+	UPROPERTY()
+	UResourceWidget* ResourceWidget;
 
 
 };
