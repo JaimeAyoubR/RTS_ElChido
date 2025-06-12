@@ -57,6 +57,11 @@ void AGameManager::Tick(float DeltaTime)
 	}
 }
 
+void AGameManager::HandleVictory()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Victoria"));
+}
+
 void AGameManager::SpawnPawn(TSubclassOf<ABasePawn> VillagerClass)
 {
 	if (!VillagerClass || !EdificioSeleccionado) return;

@@ -8,6 +8,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "GameManager.h"
+#include "GuerreroPawn.h"
 #include "Kismet/GameplayStatics.h"
 
 AMyPlayerController::AMyPlayerController()
@@ -55,9 +56,10 @@ void AMyPlayerController::SetupInputComponent()
 		                                   &AMyPlayerController::CommandSelectedActors);
 
 		//Funcion para entrear en Build Mode
-		EnhancedInputComponent->BindAction(BuildModeAction, ETriggerEvent::Started, this, &AMyPlayerController::EnterBuildMode);
-		EnhancedInputComponent->BindAction(SelectAction, ETriggerEvent::Completed, this, &AMyPlayerController::PlaceBuilding);
-
+		EnhancedInputComponent->BindAction(BuildModeAction, ETriggerEvent::Started, this,
+		                                   &AMyPlayerController::EnterBuildMode);
+		EnhancedInputComponent->BindAction(SelectAction, ETriggerEvent::Completed, this,
+		                                   &AMyPlayerController::PlaceBuilding);
 	}
 }
 
@@ -114,18 +116,35 @@ void AMyPlayerController::CommandSelectedActors(const FInputActionValue& value)
 	}
 	else if (SelectedActores.Num() > 0)
 	{
-		int i = SelectedActores.Num() / -2;
+		bool bTargetIsBuilding = HitResult.GetActor() && HitResult.GetActor()->ActorHasTag("Edificio");
+
 		for (AActor* Actor : SelectedActores)
 		{
-			UE_LOG(LogTemp, Display, TEXT("SelectActors: %s"), *Actor->GetName());
-			if (Actor != nullptr && Actor->GetClass()->ImplementsInterface(UNavegateInterface::StaticClass()))
+			if (!Actor) continue;
+
+			if (bTargetIsBuilding)
 			{
-				INavegateInterface::Execute_MoveToLocation(Actor, HitResult.Location + FVector(0, 100 * i, 0));
-				i++;
+				if (AGuerreroPawn* Guerrero = Cast<AGuerreroPawn>(Actor))
+				{
+					//UE_LOG(LogTemp,Warning,TEXT("Llendo al target"));
+					//INavegateInterface::Execute_MoveToLocation(Actor, HitResult.Location);
+					Guerrero->PrepareToAttack(HitResult.GetActor());
+				}
+				else if (Actor->GetClass()->ImplementsInterface(UNavegateInterface::StaticClass()))
+				{
+					INavegateInterface::Execute_MoveToLocation(Actor, HitResult.Location);
+				}
+			}
+			else
+			{
+				if (Actor->GetClass()->ImplementsInterface(UNavegateInterface::StaticClass()))
+				{
+					INavegateInterface::Execute_MoveToLocation(Actor, HitResult.Location);
+				}
 			}
 		}
 	}
-	else
+	else if (HitActor) 
 	{
 		if (HitActor->IsA(AResources::StaticClass()))
 		{

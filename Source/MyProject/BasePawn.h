@@ -68,7 +68,7 @@ protected:
 	float RotationSpeed = 5.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
-	float DistanceOffsetResource = 280.f; 
+	float DistanceOffsetResource = 350.f; 
 
 	UPROPERTY()
 	AResources* ResourceToCollect = nullptr;
