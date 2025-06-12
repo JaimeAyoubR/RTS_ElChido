@@ -95,5 +95,15 @@ public:
 	UFUNCTION()
 	void GoCollectResource(AResources* Resource);
 
+	UPROPERTY(EditAnywhere, Category = "Escape")
+	AActor* MainBuild; 
+
+	UPROPERTY(EditAnywhere, Category = "Escape")
+	float EscapeSpeed = 500.0f;
+
+	bool bIsBeingChased = false;
+
+	void StartEscape();
+
 	
 };

@@ -8,6 +8,17 @@
 void AEnemyPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	AActor* AVillager = GetCloserVillager();
+	if (AVillager)
+	{
+		//UE_LOG(LogTemp,Warning,TEXT("Se detecto Aldeano"));
+		ABasePawn* Villager = Cast<ABasePawn>(AVillager);
+		if (Villager)
+		{
+			UE_LOG(LogTemp,Warning,TEXT("Persiguiendo"));
+			Villager->StartEscape(); 
+		}
+	}
 	if (!CurrentTarget || FVector::Dist(GetActorLocation(), CurrentTarget->GetActorLocation()) > DetectionRadius)
 	{
 		CurrentTarget = GetCloserVillager();
@@ -45,6 +56,8 @@ AActor* AEnemyPawn::GetCloserVillager()
 	for (AActor* Villager : FoundVillagers)
 	{
 		float Dist = FVector::Dist(GetActorLocation(), Villager->GetActorLocation());
+		//UE_LOG(LogTemp, Warning, TEXT("Dist to villager: %f"), Dist);
+		//UE_LOG(LogTemp, Warning, TEXT("Distance menor: %f"), ClosestDistance);
 		if (Dist < ClosestDistance)
 		{
 			ClosestDistance = Dist;

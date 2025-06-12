@@ -120,9 +120,34 @@ void ABasePawn::Move()
 void ABasePawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	if (bIsBeingChased)
+	{
+		if (MainBuild)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Corriendo"));
+			FVector Direction = (MainBuild->GetActorLocation() - GetActorLocation()).GetSafeNormal();
+			AddActorWorldOffset(Direction * EscapeSpeed * GetWorld()->GetDeltaSeconds(), true);
+			//UE_LOG(LogTemp, Warning, TEXT("Dist to villager: %f"), GetActorLocation().X);
+			//UE_LOG(LogTemp, Warning, TEXT("Distance menor: %f"), MainBuild->GetActorLocation().X);
+
+			float Distancia = FVector::Dist(GetActorLocation(), MainBuild->GetActorLocation());
+			UE_LOG(LogTemp, Warning, TEXT("Distance hacia edificio: %f"), Distancia);
+			if (FVector::Dist(GetActorLocation(), MainBuild->GetActorLocation()) < 150.f)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("LLego"));
+				bIsBeingChased = false;
+			}
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("MainBuild is NULL while escaping"));
+			bIsBeingChased = false;
+		}
+	}
+
+	Move();
 	//UE_LOG(LogTemp, Warning, TEXT("Actor Location: %s"), *GetActorLocation().ToString());
 	//UE_LOG(LogTemp, Warning, TEXT("Mesh Relative Location: %s"), *SkeletMesh->GetRelativeLocation().ToString());
-	Move();
 	//UE_LOG(LogTemp, Display, TEXT("4"));
 }
 
@@ -176,4 +201,9 @@ void ABasePawn::GoCollectResource(AResources* Resource)
 	MoveTargetLocation = Resource->GetActorLocation();
 	bIsMoving = true;
 	ResourceToCollect = Resource;
+}
+
+void ABasePawn::StartEscape()
+{
+	bIsBeingChased = true;
 }
