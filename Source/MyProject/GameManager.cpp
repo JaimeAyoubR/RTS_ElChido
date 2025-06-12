@@ -17,7 +17,6 @@ AGameManager::AGameManager()
 	numOfStone = 500;
 	numOfWater = 500;
 	numOfWood = 5000;
-
 }
 
 // Called when the game starts or when spawned
@@ -60,6 +59,25 @@ void AGameManager::Tick(float DeltaTime)
 void AGameManager::HandleVictory()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Victoria"));
+	if (VictoryWidgetClass) 
+	{
+		UUserWidget* VictoryWidget = CreateWidget<UUserWidget>(GetWorld(), VictoryWidgetClass);
+		if (VictoryWidget)
+		{
+			VictoryWidget->AddToViewport();
+
+			APlayerController* PC = GetWorld()->GetFirstPlayerController();
+			if (PC)
+			{
+				PC->SetShowMouseCursor(true);
+				PC->SetInputMode(FInputModeUIOnly());
+			}
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No se encontro el widget"));
+	}
 }
 
 void AGameManager::SpawnPawn(TSubclassOf<ABasePawn> VillagerClass)
@@ -208,3 +226,5 @@ void AGameManager::EnterBuildMode(TSubclassOf<AWarriorBuild> BuildingClass)
 		BuildPreview->SetActorHiddenInGame(false);
 	}
 }
+
+

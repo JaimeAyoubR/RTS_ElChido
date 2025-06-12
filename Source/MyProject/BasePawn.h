@@ -30,9 +30,6 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Collision, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UCapsuleComponent> Capsule;
 
-	//Skeleton Mesh
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Pawn, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<USkeletalMeshComponent> SkeletMesh;
 
 	//Floating PawnMovement Component
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Pawn, meta = (AllowPrivateAccess = "true"))
@@ -45,7 +42,10 @@ private:
 public:
 	// Sets default values for this pawn's properties
 	ABasePawn();
-	
+
+	//Skeleton Mesh
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Pawn, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USkeletalMeshComponent> SkeletMesh;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Pawn, meta = (AllowPrivateAccess = "true"))
 	int Level;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Pawn, meta = (AllowPrivateAccess = "true"))

@@ -55,6 +55,23 @@ void AGuerreroPawn::PrepareToAttack(AActor* Target)
 
 void AGuerreroPawn::PerformAttack()
 {
+	if (AttackMontage && SkeletMesh)
+	{
+		UE_LOG(LogTemp,Warning,TEXT(" Anim agregada"));
+		UAnimInstance* AnimInstance = SkeletMesh->GetAnimInstance();
+		if (AnimInstance)
+		{
+			AnimInstance->Montage_Play(AttackMontage);
+		}
+		else
+		{
+			UE_LOG(LogTemp,Warning,TEXT(" no hay montageAnim "));
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp,Warning,TEXT("No hay Anim"));
+	}
 	if (!IsValid(TargetToAttack))
 	{
 		return;

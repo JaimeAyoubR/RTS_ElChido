@@ -80,5 +80,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void EnterBuildMode(TSubclassOf<AWarriorBuild> BuildingClass);
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TSubclassOf<UUserWidget> VictoryWidgetClass;
+
+
+
 
 };

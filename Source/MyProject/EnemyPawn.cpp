@@ -8,7 +8,7 @@
 void AEnemyPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	ABasePawn* Villager;
+	ABasePawn* Villager = nullptr;
 	Villager = Cast<ABasePawn>(Villager);
 	if (Villager && !Villager->IsBeingChased())
 	{

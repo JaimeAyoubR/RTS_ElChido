@@ -49,4 +49,7 @@ public:
 	void StartAttackIfInRange();
 
 	void StopAttacking();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
+	UAnimMontage* AttackMontage;
 };
