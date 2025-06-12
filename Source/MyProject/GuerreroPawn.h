@@ -35,7 +35,7 @@ public:
 	float AttackInterval = 1.0f;
 
 	UPROPERTY(EditAnywhere)
-	float AttackDamage = 10.0f;
+	float AttackDamage = 20.0f;
 
 	UPROPERTY()
 	AActor* TargetToAttack = nullptr;

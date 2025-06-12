@@ -10,6 +10,7 @@ AEnemyMainBuild::AEnemyMainBuild()
 	Tags.Add(FName("Edificio"));
 	Tags.Add(FName("Enemigo"));
 	MaxtHealth = 200;
+	CurrentHealth = MaxtHealth;
 }
 
 void AEnemyMainBuild::Damage(int32 Damage)
