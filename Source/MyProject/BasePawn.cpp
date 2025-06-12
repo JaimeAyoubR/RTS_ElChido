@@ -56,6 +56,7 @@ void ABasePawn::BeginPlay()
 
 void ABasePawn::Move()
 {
+	//UE_LOG(LogTemp, Warning, TEXT("IsMoving"));
 	if (ResourceToCollect)
 	{
 		float DistToResource = FVector::Dist(GetActorLocation(), ResourceToCollect->GetActorLocation());
@@ -120,28 +121,17 @@ void ABasePawn::Move()
 void ABasePawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (bIsBeingChased)
+	if (bIsBeingChased && EnemyActor)
 	{
-		if (MainBuild)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Corriendo"));
-			FVector Direction = (MainBuild->GetActorLocation() - GetActorLocation()).GetSafeNormal();
-			AddActorWorldOffset(Direction * EscapeSpeed * GetWorld()->GetDeltaSeconds(), true);
-			//UE_LOG(LogTemp, Warning, TEXT("Dist to villager: %f"), GetActorLocation().X);
-			//UE_LOG(LogTemp, Warning, TEXT("Distance menor: %f"), MainBuild->GetActorLocation().X);
+		UE_LOG(LogTemp,Warning,TEXT("ME PERSIGUEEEN AAAAAAH"));
+		FVector EscapeDirection = (GetActorLocation() - EnemyActor->GetActorLocation()).GetSafeNormal();
+		AddActorWorldOffset(EscapeDirection * EscapeSpeed * GetWorld()->GetDeltaSeconds(), true);
 
-			float Distancia = FVector::Dist(GetActorLocation(), MainBuild->GetActorLocation());
-			UE_LOG(LogTemp, Warning, TEXT("Distance hacia edificio: %f"), Distancia);
-			if (FVector::Dist(GetActorLocation(), MainBuild->GetActorLocation()) < 150.f)
-			{
-				UE_LOG(LogTemp, Warning, TEXT("LLego"));
-				bIsBeingChased = false;
-			}
-		}
-		else
+		float Distance = FVector::Dist(GetActorLocation(), EnemyActor->GetActorLocation());
+		if (Distance > EscapeStopDistance) 
 		{
-			UE_LOG(LogTemp, Warning, TEXT("MainBuild is NULL while escaping"));
 			bIsBeingChased = false;
+			EnemyActor = nullptr;
 		}
 	}
 
@@ -203,7 +193,8 @@ void ABasePawn::GoCollectResource(AResources* Resource)
 	ResourceToCollect = Resource;
 }
 
-void ABasePawn::StartEscape()
+void ABasePawn::StartEscape(AActor* InChaser)
 {
+	EnemyActor = InChaser;
 	bIsBeingChased = true;
 }

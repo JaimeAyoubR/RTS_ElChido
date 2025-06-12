@@ -103,7 +103,15 @@ public:
 
 	bool bIsBeingChased = false;
 
-	void StartEscape();
+	void StartEscape(AActor* InChaser);
+
+	AActor* EnemyActor = nullptr;
+
+	UPROPERTY(EditAnywhere)
+	float EscapeStopDistance = 500.f;
+
+	UFUNCTION(BlueprintCallable)
+	bool IsBeingChased() const { return bIsBeingChased; }
 
 	
 };

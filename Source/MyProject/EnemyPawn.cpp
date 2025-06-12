@@ -8,22 +8,18 @@
 void AEnemyPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	AActor* AVillager = GetCloserVillager();
-	if (AVillager)
+	ABasePawn* Villager;
+	Villager = Cast<ABasePawn>(Villager);
+	if (Villager && !Villager->IsBeingChased())
 	{
-		//UE_LOG(LogTemp,Warning,TEXT("Se detecto Aldeano"));
-		ABasePawn* Villager = Cast<ABasePawn>(AVillager);
-		if (Villager)
-		{
-			UE_LOG(LogTemp,Warning,TEXT("Persiguiendo"));
-			Villager->StartEscape(); 
-		}
+		UE_LOG(LogTemp, Warning, TEXT("Persiguiendo de nuevo"));
+		Villager->StartEscape(this);
 	}
 	if (!CurrentTarget || FVector::Dist(GetActorLocation(), CurrentTarget->GetActorLocation()) > DetectionRadius)
 	{
 		CurrentTarget = GetCloserVillager();
 	}
-	
+
 	if (CurrentTarget)
 	{
 		float Distance = FVector::Dist(GetActorLocation(), CurrentTarget->GetActorLocation());
@@ -31,7 +27,7 @@ void AEnemyPawn::Tick(float DeltaTime)
 		if (Distance > StopFollowDistance)
 		{
 			FVector Direction = (CurrentTarget->GetActorLocation() - GetActorLocation()).GetSafeNormal();
-			AddActorWorldOffset(Direction * MoveSpeed * DeltaTime, true); 
+			AddActorWorldOffset(Direction * MoveSpeed * DeltaTime, true);
 		}
 		else
 		{
