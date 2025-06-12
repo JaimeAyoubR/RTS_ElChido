@@ -76,7 +76,7 @@ void ABasePawn::Move()
 				case EResourceType::Water:
 					GameManager->AddWater(ResourceToCollect->ResourceAmount);
 					break;
-					case EResourceType::Wood:
+				case EResourceType::Wood:
 					GameManager->AddWood(ResourceToCollect->ResourceAmount);
 					break;
 				}
