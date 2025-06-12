@@ -55,26 +55,18 @@ void AGuerreroPawn::PrepareToAttack(AActor* Target)
 
 void AGuerreroPawn::PerformAttack()
 {
+	if (!IsValid(TargetToAttack))
+	{
+		GetWorld()->GetTimerManager().ClearTimer(AttackCheckTimerHandle);
+		return;
+	}
+
 	if (AttackMontage && SkeletMesh)
 	{
-		UE_LOG(LogTemp,Warning,TEXT(" Anim agregada"));
-		UAnimInstance* AnimInstance = SkeletMesh->GetAnimInstance();
-		if (AnimInstance)
+		if (UAnimInstance* AnimInstance = SkeletMesh->GetAnimInstance())
 		{
 			AnimInstance->Montage_Play(AttackMontage);
 		}
-		else
-		{
-			UE_LOG(LogTemp,Warning,TEXT(" no hay montageAnim "));
-		}
-	}
-	else
-	{
-		UE_LOG(LogTemp,Warning,TEXT("No hay Anim"));
-	}
-	if (!IsValid(TargetToAttack))
-	{
-		return;
 	}
 
 	if (AEnemyMainBuild* Build = Cast<AEnemyMainBuild>(TargetToAttack))
@@ -99,9 +91,20 @@ void AGuerreroPawn::StartAttackIfInRange()
 	{
 		GetWorld()->GetTimerManager().ClearTimer(AttackCheckTimerHandle);
 
-		
+
 		GetWorld()->GetTimerManager().SetTimer(AttackCheckTimerHandle, this, &AGuerreroPawn::PerformAttack,
 		                                       AttackInterval, true);
+		if (AttackMontage && SkeletMesh)
+		{
+			if (UAnimInstance* AnimInstance = SkeletMesh->GetAnimInstance())
+			{
+				AnimInstance->Montage_Play(AttackMontage);
+			}
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("No hay Anim"));
+		}
 	}
 }
 

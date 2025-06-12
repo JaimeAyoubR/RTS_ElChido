@@ -32,7 +32,7 @@ public:
 	float AttackRange = 1000.0f;
 
 	UPROPERTY(EditAnywhere)
-	float AttackInterval = 1.0f;
+	float AttackInterval = 1.57f;
 
 	UPROPERTY(EditAnywhere)
 	float AttackDamage = 20.0f;
