@@ -8,12 +8,14 @@
 void AEnemyPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	ABasePawn* Villager = nullptr;
-	Villager = Cast<ABasePawn>(Villager);
-	if (Villager && !Villager->IsBeingChased())
+	if (CurrentTarget)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Persiguiendo de nuevo"));
-		Villager->StartEscape(this);
+		ABasePawn* Villager = Cast<ABasePawn>(CurrentTarget);
+		if (Villager && !Villager->IsBeingChased())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Persiguiendo de nuevo"));
+			Villager->StartEscape(this);
+		}
 	}
 	if (!CurrentTarget || FVector::Dist(GetActorLocation(), CurrentTarget->GetActorLocation()) > DetectionRadius)
 	{

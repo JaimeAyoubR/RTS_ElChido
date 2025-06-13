@@ -134,6 +134,11 @@ void ABasePawn::Tick(float DeltaTime)
 			EnemyActor = nullptr;
 		}
 	}
+	if (!bIsBeingChased)
+	{
+		UE_LOG(LogTemp,Warning,TEXT("NO hay enemy actor"));
+	}
+
 
 	Move();
 	//UE_LOG(LogTemp, Warning, TEXT("Actor Location: %s"), *GetActorLocation().ToString());
