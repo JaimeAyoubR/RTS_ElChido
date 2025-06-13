@@ -59,7 +59,7 @@ void AGameManager::Tick(float DeltaTime)
 void AGameManager::HandleVictory()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Victoria"));
-	if (VictoryWidgetClass) 
+	if (VictoryWidgetClass)
 	{
 		UUserWidget* VictoryWidget = CreateWidget<UUserWidget>(GetWorld(), VictoryWidgetClass);
 		if (VictoryWidget)
@@ -82,9 +82,13 @@ void AGameManager::HandleVictory()
 
 void AGameManager::SpawnPawn(TSubclassOf<ABasePawn> VillagerClass)
 {
-	if (!VillagerClass || !EdificioSeleccionado) return;
+	ABasePawn* DefaultUnit = Cast<ABasePawn>(VillagerClass->GetDefaultObject());
+	if (!DefaultUnit) return;
 
-	if (numOfFood >= costOfFVillager)
+	if (numOfFood >= DefaultUnit->CostFood &&
+		numOfStone >= DefaultUnit->CostStone &&
+		numOfWater >= DefaultUnit->CostWater &&
+		numOfWood >= DefaultUnit->CostWood)
 	{
 		FVector SpawnLocation = EdificioSeleccionado->GetActorLocation() + FVector(-200.f, 200.f, 0.f);
 		FRotator SpawnRotation = FRotator::ZeroRotator;
@@ -92,16 +96,20 @@ void AGameManager::SpawnPawn(TSubclassOf<ABasePawn> VillagerClass)
 		ABasePawn* SpawnedPawn = GetWorld()->SpawnActor<ABasePawn>(VillagerClass, SpawnLocation, SpawnRotation);
 		if (SpawnedPawn)
 		{
-			numOfFood -= costOfFVillager;
+			numOfFood -= DefaultUnit->CostFood;
+			numOfStone -= DefaultUnit->CostStone;
+			numOfWater -= DefaultUnit->CostWater;
+			numOfWood -= DefaultUnit->CostWood;
+
 			if (ResourceWidget)
 				ResourceWidget->UpdateResources(numOfFood, numOfStone, numOfWater, numOfWood);
-			UE_LOG(LogTemp, Warning, TEXT("Pawn creado junto al edificio: %s"), *SpawnedPawn->GetName());
-			UE_LOG(LogTemp, Warning, TEXT("Recursos restantes: %i"), numOfFood);
+
+			UE_LOG(LogTemp, Warning, TEXT("Spawned: %s"), *SpawnedPawn->GetName());
 		}
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("No se tienen suficientes recursos" ));
+		UE_LOG(LogTemp, Warning, TEXT("Recursos insuficientes para spawnear unidad."));
 	}
 }
 
@@ -226,5 +234,3 @@ void AGameManager::EnterBuildMode(TSubclassOf<AWarriorBuild> BuildingClass)
 		BuildPreview->SetActorHiddenInGame(false);
 	}
 }
-
-

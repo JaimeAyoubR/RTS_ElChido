@@ -18,8 +18,6 @@ AMainBuild::AMainBuild()
 	SelectIndicator->SetHiddenInGame(true);
 	SelectIndicator->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-	
-
 
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -79,9 +77,14 @@ void AMainBuild::SelectActor_Implementation(const bool select)
 	{
 		AGameManager* GM = Cast<AGameManager>(
 			UGameplayStatics::GetActorOfClass(GetWorld(), AGameManager::StaticClass()));
+
 		if (GM)
 		{
 			GM->EdificioSeleccionado = this;
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("No se encontró AGameManager en el mundo desde %s"), *GetName());
 		}
 	}
 }

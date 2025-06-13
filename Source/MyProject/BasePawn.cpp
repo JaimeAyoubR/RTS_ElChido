@@ -123,7 +123,7 @@ void ABasePawn::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if (bIsBeingChased && EnemyActor)
 	{
-		UE_LOG(LogTemp,Warning,TEXT("ME PERSIGUEEEN AAAAAAH"));
+		//UE_LOG(LogTemp,Warning,TEXT("ME PERSIGUEEEN AAAAAAH"));
 		FVector EscapeDirection = (GetActorLocation() - EnemyActor->GetActorLocation()).GetSafeNormal();
 		AddActorWorldOffset(EscapeDirection * EscapeSpeed * GetWorld()->GetDeltaSeconds(), true);
 
@@ -136,7 +136,7 @@ void ABasePawn::Tick(float DeltaTime)
 	}
 	if (!bIsBeingChased)
 	{
-		UE_LOG(LogTemp,Warning,TEXT("NO hay enemy actor"));
+		//UE_LOG(LogTemp,Warning,TEXT("NO hay enemy actor"));
 	}
 
 

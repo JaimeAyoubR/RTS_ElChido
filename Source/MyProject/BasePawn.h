@@ -112,6 +112,18 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool IsBeingChased() const { return bIsBeingChased; }
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Costos")
+	int32 CostFood = 50;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Costos")
+	int32 CostStone = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Costos")
+	int32 CostWater = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Costos")
+	int32 CostWood = 0;
 
 	
 };
