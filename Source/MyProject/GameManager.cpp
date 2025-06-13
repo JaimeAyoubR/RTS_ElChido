@@ -211,7 +211,7 @@ void AGameManager::PlaceBuilding()
 
 void AGameManager::EnterBuildMode(TSubclassOf<AWarriorBuild> BuildingClass)
 {
-	if (!BuildingClass) return;
+	if (bIsInBuildMode || !BuildingClass) return;
 
 	bIsInBuildMode = true;
 	PendingBuildClass = BuildingClass;
