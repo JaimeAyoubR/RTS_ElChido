@@ -29,7 +29,7 @@ void AEnemyPawn::Tick(float DeltaTime)
 		if (Distance > StopFollowDistance)
 		{
 			FVector Direction = (CurrentTarget->GetActorLocation() - GetActorLocation()).GetSafeNormal();
-			AddActorWorldOffset(Direction * MoveSpeed * DeltaTime, true);
+			AddActorWorldOffset(Direction * MoveSpeede * DeltaTime, true);
 		}
 		else
 		{

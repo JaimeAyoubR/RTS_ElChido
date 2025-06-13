@@ -6,6 +6,7 @@
 AVillagerPlusPawn::AVillagerPlusPawn()
 {
 	PrimaryActorTick.bCanEverTick = true;
+	MoveSpeed = 600;
 }
 
 void AVillagerPlusPawn::BeginPlay()

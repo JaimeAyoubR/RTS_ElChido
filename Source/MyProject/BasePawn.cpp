@@ -114,7 +114,7 @@ void ABasePawn::Move()
 	                                        RotationSpeed);
 	SetActorRotation(NewRotation);
 
-	AddMovementInput(MoveDirection, 1.0f);
+	AddMovementInput(MoveDirection, MoveSpeed * GetWorld()->GetDeltaSeconds());
 }
 
 // Called every frame

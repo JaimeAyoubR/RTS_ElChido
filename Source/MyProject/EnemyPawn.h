@@ -21,7 +21,7 @@ protected:
 private:
 
 	UPROPERTY(EditAnywhere, Category="Movimiento")
-	float MoveSpeed = 400.0f; 
+	float MoveSpeede = 400.0f; 
 
 	AActor* GetCloserVillager();
 	AActor* CurrentTarget;

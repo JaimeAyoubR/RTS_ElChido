@@ -22,7 +22,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
+	void ShowDefeatWidget();
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	void HandleVictory();
@@ -82,6 +83,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	TSubclassOf<UUserWidget> VictoryWidgetClass;
+
+	float ElapsedTime = 0.0f;  
+	bool bHasDefeatWidgetShown = false;
+
+	UPROPERTY(EditAnywhere, Category="UI")
+	TSubclassOf<UUserWidget> DefeatWidgetClass;
 
 
 

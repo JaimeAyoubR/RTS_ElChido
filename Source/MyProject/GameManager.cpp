@@ -39,10 +39,54 @@ void AGameManager::BeginPlay()
 	}
 }
 
+void AGameManager::ShowDefeatWidget()
+{
+	if (DefeatWidgetClass)
+	{
+		UUserWidget* DefeatWidget = CreateWidget<UUserWidget>(GetWorld(), DefeatWidgetClass);
+		if (DefeatWidget)
+		{
+			DefeatWidget->AddToViewport();
+
+			APlayerController* PC = GetWorld()->GetFirstPlayerController();
+			if (PC)
+			{
+				PC->SetShowMouseCursor(true);
+				PC->SetInputMode(FInputModeUIOnly());
+			}
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("DefeatWidgetClass no está asignado."));
+	}
+}
+
 // Called every frame
 void AGameManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
+	if (bIsInBuildMode && BuildPreview)
+	{
+		FHitResult Hit;
+		APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
+		if (PC && PC->GetHitResultUnderCursor(ECC_Visibility, false, Hit))
+		{
+			FVector Location = Hit.Location;
+			BuildPreview->SetActorLocation(Location);
+		}
+	}
+
+	if (!bHasDefeatWidgetShown)
+	{
+		ElapsedTime += DeltaTime;
+		if (ElapsedTime >= 300.0f)  // 5 minutos = 300 segundos
+		{
+			ShowDefeatWidget();
+			bHasDefeatWidgetShown = true;
+		}
+	}
 
 	if (bIsInBuildMode && BuildPreview)
 	{

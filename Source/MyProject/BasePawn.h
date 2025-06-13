@@ -66,6 +66,7 @@ protected:
 	float DistanceOffset = 50.f;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Pawn, meta = (AllowPrivateAccess = "true"))
 	float RotationSpeed = 5.0f;
+	
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	float DistanceOffsetResource = 350.f; 
@@ -82,6 +83,9 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Movement")
+	float MoveSpeed = 500.0f;
+	
 	UFUNCTION()
 	void SelectActorLocal(const bool isSelected);
 
