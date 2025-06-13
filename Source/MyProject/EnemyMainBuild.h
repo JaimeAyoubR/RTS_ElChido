@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "MainBuild.h"
+#include "Components/WidgetComponent.h"
+#include "Blueprint/UserWidget.h"
 #include "EnemyMainBuild.generated.h"
 
 /**
@@ -21,6 +23,11 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int32 CurrentHealth;
+	UPROPERTY(VisibleAnywhere, Category = "UI")
+	UWidgetComponent* EnemyHealthBar;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<UUserWidget> HealthBarWidgetClass;
 
 	UFUNCTION()
 	void Damage(int32 Damage);
